@@ -9,7 +9,7 @@ Nq = 3
 dx = L/Nq
 dQ = Q/Nq
 ## source charges
-ring(pos=vector(-L/2,0,0), axis=vector(L,0,0), radius=0.6, opacity=0.2)
+ring(pos=vector(-L/2,0,0), axis=vector(L,0,0), radius=0.1, opacity=0.2)
 sources = []
 x = -L/2 + dx/2
 while x < L/2:
