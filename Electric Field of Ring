@@ -1,18 +1,26 @@
 Web VPython 3.2
 from __future__ import division, print_function
 from visual import *
+##Prompt
+##  consider a charged ring of radius R that lies int he xy plane and is centered at the origin. You should recall that we intergrated the electric fields produced by charges around this ring to show that 
+##  Ering=kqz/(R**2+z**2)**3/2 at points along the z axis. We would also predict that the electric potential at points along the z axis is given by V=kq/z + C. Write a program that verifies this prediction
+##  By numerically evaluating the intergral -int (E*dl), moving in small steps outward from the origin and making a graph of V(z). You might want to start with a total charge of 50 nC and a radius of 0.1m.
+##  you should vary the size of your steps until they are small eneough that your result no longer strongly depends on exactly how small they are
 scene.width = 1000
 scene.height = 700
-L = .8
+##Constants
 Q = 2e-9
 Nq = 3
 dx = L/Nq
 dQ = Q/Nq
+theta=2*pi
+dtheta=pi/16
+R=0.1
+rin=ring(pos=vector(0,0,0), axis=vector(0,1,0), radius=R, opacity=0.2)
 ## source charges
-ring(pos=vector(-L/2,0,0), axis=vector(L,0,0), radius=0.1, opacity=0.2)
 sources = []
-x = -L/2 + dx/2
-while x < L/2:
-    a = sphere(pos=vector(x,0,0), radius=0.01, color=color.red, q=dQ)
+x = 0
+while x < theta:
+    s = sphere(pos=vector(0.1*cos(x),0.1*sin(x),0), radius=0.01, color=color.red, q=dQ)
     sources.append(a)
-    x = x + dx
+    x = x + dtheta
