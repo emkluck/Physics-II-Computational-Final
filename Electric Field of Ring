@@ -1,26 +1,55 @@
 Web VPython 3.2
 from __future__ import division, print_function
 from visual import *
-##Prompt
+##prompt
 ##  consider a charged ring of radius R that lies int he xy plane and is centered at the origin. You should recall that we intergrated the electric fields produced by charges around this ring to show that 
 ##  Ering=kqz/(R**2+z**2)**3/2 at points along the z axis. We would also predict that the electric potential at points along the z axis is given by V=kq/z + C. Write a program that verifies this prediction
 ##  By numerically evaluating the intergral -int (E*dl), moving in small steps outward from the origin and making a graph of V(z). You might want to start with a total charge of 50 nC and a radius of 0.1m.
 ##  you should vary the size of your steps until they are small eneough that your result no longer strongly depends on exactly how small they are
 scene.width = 1000
 scene.height = 700
-##Constants
-Q = 2e-9
-Nq = 3
-dx = L/Nq
-dQ = Q/Nq
+## constants
+R=0.1 ##Radius of ring
+C=2*pi*R ##Circumference
+L = 0.5 ##length of observation point
+Q=50e-9 ##charge of particles
+Nq=2.5 ##number of charges in ring divided by 10
+dx=C/Nq
+dQ=Q/Nq
+scalefactor = 3e-5
+k=8.99e9
 theta=2*pi
-dtheta=pi/16
-R=0.1
-rin=ring(pos=vector(0,0,0), axis=vector(0,1,0), radius=R, opacity=0.2)
+rz=vector(0,0,L) ##observation point
+
+rin=ring(pos=vector(0,0,0), axis=vector(0,0,1), radius=R, opacity=0.2)
+
 ## source charges
-sources = []
+sources=[]
 x = 0
-while x < theta:
-    s = sphere(pos=vector(0.1*cos(x),0.1*sin(x),0), radius=0.01, color=color.red, q=dQ)
-    sources.append(a)
-    x = x + dtheta
+while x<theta:
+    s=sphere(pos=vector(0.1*cos(x),0.1*sin(x),0), radius = 0.01, color=color.red, q=dQ)
+    sources.append(s)
+    x=x+dx
+
+##observation point
+x=0
+dx=L/6
+obs=[]
+while x < L:
+    Ea=arrow(pos=vector(0,0,0), axis=vector(0,0,0), color=color.orange, shaftwidth=0.01)
+    ob=cylinder(pos=vector(0,0,0), axis=vector(0,0,L), radius=0.01, opacity=0.2)
+    obs.append(Ea)
+    x=x+dx
+    
+##outerloop picks observation point    
+for Ea in obs:
+    Enet=vector (0,0,0)
+    ## inner loop goes through all source charges
+    for scharge in sources:
+        ##source charge calculation
+        rhat=rz/mag(rz)
+        Eringz=(k*dQ*mag(rz))/((mag(rz)**2+R**2)**1.5)
+        Ering=Eringz*rhat
+        Enet=Enet+Ering
+    Ea.axis= Enet*scalefactor
+    print (Enet)
