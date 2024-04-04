@@ -8,18 +8,18 @@ from visual import *
 ##  you should vary the size of your steps until they are small eneough that your result no longer strongly depends on exactly how small they are
 scene.width = 1000
 scene.height = 700
+Vgraph = gcurve(color=color.purple)
 ## constants
 R=0.1 ##Radius of ring
 C=2*pi*R ##Circumference
-L = 0.5 ##length of observation point
+L = 1 ##length of observation point
 Q=50e-9 ##charge of particles
 Nq=2.5 ##number of charges in ring divided by 10
 dx=C/Nq
 dQ=Q/Nq
-scalefactor = 3e-5
+scalefactor = 5e-6 ##I will need to change this
 k=8.99e9
 theta=2*pi
-rz=vector(0,0,L) ##observation point
 
 rin=ring(pos=vector(0,0,0), axis=vector(0,0,1), radius=R, opacity=0.2)
 
@@ -33,23 +33,26 @@ while x<theta:
 
 ##observation point
 x=0
-dx=L/6
+dx=L/200
 obs=[]
 while x < L:
+    rate(60)
     Ea=arrow(pos=vector(0,0,0), axis=vector(0,0,0), color=color.orange, shaftwidth=0.01)
-    ob=cylinder(pos=vector(0,0,0), axis=vector(0,0,L), radius=0.01, opacity=0.2)
+    ob=cylinder(pos=vector(0,0,0), axis=vector(0,0,x), radius=0.01, opacity=0.2)
     obs.append(Ea)
-    x=x+dx
-    
-##outerloop picks observation point    
-for Ea in obs:
-    Enet=vector (0,0,0)
+    ##outerloop picks observation point    
+    for Ea in obs:
+        Enet=vector (0,0,0)
     ## inner loop goes through all source charges
-    for scharge in sources:
+        for scharge in sources:
         ##source charge calculation
-        rhat=rz/mag(rz)
-        Eringz=(k*dQ*mag(rz))/((mag(rz)**2+R**2)**1.5)
-        Ering=Eringz*rhat
-        Enet=Enet+Ering
-    Ea.axis= Enet*scalefactor
+            r=vector(0,0,x) ##observation point
+            rhat=r/mag(r)
+            Ering=(k*dQ*mag(r))/((mag(r)**2+R**2)**1.5)
+            Ering=Ering*rhat
+            Enet=Enet+Ering
+            V=(k*Q)/mag(r)
+        Ea.axis= Enet*scalefactor
     print (Enet)
+    Vgraph.plot (pos= (r.z, V))
+    x=x+dx
