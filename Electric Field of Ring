@@ -33,7 +33,7 @@ while x<theta:
 
 ##observation point
 x=0
-dx=L/200
+dx=L/200 ##denominator determines how many chunks it takes to get to the final observation point
 obs=[]
 while x < L:
     rate(60)
