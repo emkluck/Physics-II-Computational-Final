@@ -12,12 +12,12 @@ Vgraph = gcurve(color=color.purple)
 ## constants
 R=0.1 ##Radius of ring
 C=2*pi*R ##Circumference
-L = 1 ##length of observation point
+L = 5*R ##length of observation point
 Q=50e-9 ##charge of particles
-Nq=2.5 ##number of charges in ring divided by 10
+Nq=25*R ##number of charges in ring
 dx=C/Nq
 dQ=Q/Nq
-scalefactor = 5e-6 ##I will need to change this
+scalefactor = 6e-6 ##I will need to change this (6e-6 when radius is 0.1 & nC is 50e-9) (0.05 when R=1) (6e-5 for 5e-9 nC)
 k=8.99e9
 theta=2*pi
 
@@ -27,18 +27,18 @@ rin=ring(pos=vector(0,0,0), axis=vector(0,0,1), radius=R, opacity=0.2)
 sources=[]
 x = 0
 while x<theta:
-    s=sphere(pos=vector(0.1*cos(x),0.1*sin(x),0), radius = 0.01, color=color.red, q=dQ)
+    s=sphere(pos=vector(R*cos(x),R*sin(x),0), radius = R/10, color=color.red, q=dQ)
     sources.append(s)
     x=x+dx
 
 ##observation point
 x=0
-dx=L/200 ##denominator determines how many chunks it takes to get to the final observation point
+dx=L/500 ##number of steps it takes to get to the final observation point L
 obs=[]
 while x < L:
-    rate(60)
-    Ea=arrow(pos=vector(0,0,0), axis=vector(0,0,0), color=color.orange, shaftwidth=0.01)
-    ob=cylinder(pos=vector(0,0,0), axis=vector(0,0,x), radius=0.01, opacity=0.2)
+    rate(30)
+    Ea=arrow(pos=vector(0,0,0), axis=vector(0,0,0), color=color.orange, shaftwidth=R/10)
+    ob=cylinder(pos=vector(0,0,0), axis=vector(0,0,x), radius=R/10, opacity=0.1)
     obs.append(Ea)
     ##outerloop picks observation point    
     for Ea in obs:
